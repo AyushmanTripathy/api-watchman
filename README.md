@@ -1,3 +1,4 @@
-# cli api client
-this repo is for cli api client <br />
-check it out [HERE](https://ayushmantripathy.github.io/cli_api_client/)
+# WatchMan
+WatchMan is a terminal based api client <br />
+### Check it
+`sudo npm intsall -g watchman`
