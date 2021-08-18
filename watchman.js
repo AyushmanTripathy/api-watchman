@@ -11,7 +11,7 @@ const rl = readline.createInterface({
   terminal: false,
 });
 
-const watchPath = process.argv[process.argv.length - 1];
+const watchPath = process.cwd(); //process.argv[process.argv.length - 1];
 
 init();
 function init() {
