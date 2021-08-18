@@ -1,6 +1,6 @@
 {
   "name": "watchman-api",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "watchman is a terminal based api client",
   "main": "watchman.js",
   "bin": {
