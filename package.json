@@ -1,14 +1,14 @@
 {
-  "name": "node",
+  "name": "watchman",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "watchman is a terminal based api client",
+  "main": "watchman.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "author": "Ayushman Tripathy",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "node-fetch": "^2.6.1"
   }

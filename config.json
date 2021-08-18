@@ -1,6 +1,1 @@
-{
-  "port": "8080",
-  "link": "http://localhost:8080/get/op",
-  "type": "json",
-  "delay": "100"
-}
+{"link":"http://localhost:8080/get/ayush","type":"json","delay":"100"}
