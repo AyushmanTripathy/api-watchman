@@ -1,11 +1,10 @@
 {
-  "name": "watchman",
+  "name": "watchman-api",
   "version": "1.0.0",
   "description": "watchman is a terminal based api client",
   "main": "watchman.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+  "bin": {
+    "tran": "./watchman.js"
   },
   "author": "Ayushman Tripathy",
   "license": "MIT",
