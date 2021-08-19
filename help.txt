@@ -1,0 +1,3 @@
+watchman is command line api client 
+
+use command ' watchman ' in you projects root
