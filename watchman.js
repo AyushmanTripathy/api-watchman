@@ -19,6 +19,8 @@ init();
 function init() {
   //get config
 
+  console.log("type help to know more");
+
   console.log(chalk.red(`watching ${watchPath}`));
   console.log(config);
 
@@ -86,9 +88,9 @@ function watch(path) {
 }
 
 function fetchLink(command) {
-  if (!config[command])
+  if (!config[command] && command)
     return console.log(chalk.red(`${command} not defined!`));
-  request(config[command]);
+  if (command != undefined) request(config[command]);
 }
 
 function remove(args) {
