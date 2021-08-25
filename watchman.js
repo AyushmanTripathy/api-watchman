@@ -3,6 +3,8 @@
 const fetch = require("node-fetch");
 const readline = require("readline");
 const fs = require("fs");
+const chalk = require("chalk");
+
 const config = require("./config.json");
 
 const rl = readline.createInterface({
@@ -11,16 +13,16 @@ const rl = readline.createInterface({
   terminal: false,
 });
 
-const watchPath = process.cwd(); //process.argv[process.argv.length - 1];
+const watchPath = process.cwd();
 
 init();
 function init() {
   //get config
 
-  console.log("\x1b[31m", `watching ${watchPath}`, "\x1b[31m");
+  console.log(chalk.red(`watching ${watchPath}`));
   console.log(config);
 
-  request(config.link);
+  request(config[config.def]);
 
   watch(watchPath);
 
@@ -29,49 +31,81 @@ function init() {
   });
 }
 
+function figureCommand(line) {
+  const input = line.split(" ");
+  const command = input.shift().trim();
+
+  switch (command) {
+    case "set":
+      change(input);
+      break;
+    case "open":
+      request(input[0]);
+      break;
+    case "log":
+      log(input);
+      break;
+    case "clear":
+      console.clear();
+      break;
+    case "rm":
+      remove(input);
+      break;
+    case "help":
+      help();
+      break;
+    default:
+      fetchLink(command);
+      break;
+  }
+}
+
 function watch(path) {
   let running = false;
   fs.watch(path, (eventType, filename) => {
     if (running) return;
 
     running = true;
-    console.log(
-      "\x1b[31m",
-      "dectected " + eventType + " on " + filename,
-      "\x1b[31m"
-    );
-    console.log("\x1b[39m");
+    console.log(chalk.red(`dectected ${eventType} on ${filename}`));
 
     setTimeout(() => {
       running = false;
-      request(config.link);
+      request(config[config.def]);
     }, config.delay);
   });
 }
 
-function figureCommand(line) {
-  const input = line.split(" ");
-  const command = input.shift();
+function fetchLink(command) {
+  if (!config[command])
+    return console.log(chalk.red(`${command} not defined!`));
+  request(config[command]);
+}
 
-  switch (command) {
-    case ":set":
-      change(input);
-      break;
-    case ":link":
-      request(config.link);
-      break;
-    case ":open":
-      request(input[0]);
-      break;
-    case ":log":
-      console.log(config[input[0]]);
-      break;
-  }
+function remove(args) {
+  args.forEach((key) => {
+    if (config[key] == undefined) return;
+    delete config[key];
+    write(config, `${__dirname}/config.json`);
+    console.log(chalk.red(`removed ${key}`));
+  });
+}
+
+function help() {
+  fs.readFile(`${__dirname}/help.txt`, "utf8", function read(err, content) {
+    if (err) console.log(chalk.red("could not fetch help.txt"));
+    console.log(content);
+  });
+}
+
+function log(input) {
+  if (!config[input[0]]) return console.log(config);
+  console.log(config[input[0]]);
 }
 
 function change(args) {
   config[args[0]] = args[1];
   write(config, `${__dirname}/config.json`);
+  console.log(chalk.green(`${args[0]} : ${args[1]}`));
 }
 
 function write(obj, path) {
@@ -84,9 +118,7 @@ function write(obj, path) {
 }
 
 function request(link) {
-  let response;
-
-  console.log(`to ${link}`);
+  console.log(chalk.red(`to ${link}`));
 
   try {
     fetch(link)
@@ -95,12 +127,11 @@ function request(link) {
       })
       .then((res) => {
         console.log(res);
-        response = res;
       })
       .catch((err) => {
         console.log(err);
       });
-
-    return response;
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 }
