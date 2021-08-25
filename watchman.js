@@ -32,14 +32,14 @@ function init() {
 }
 
 function figureCommand(line) {
-  const input = line.split(" ");
-  const command = input.shift().trim();
+  const input = processLine(line);
+  const command = input.shift();
 
   switch (command) {
     case "set":
       change(input);
       break;
-    case "open":
+    case "fetch":
       request(input[0]);
       break;
     case "log":
@@ -58,6 +58,16 @@ function figureCommand(line) {
       fetchLink(command);
       break;
   }
+}
+
+function processLine(line) {
+  arr = [];
+  line = line.trim().split(" ");
+  line.forEach((word) => {
+    if (word != "") arr.push(word);
+  });
+
+  return arr;
 }
 
 function watch(path) {

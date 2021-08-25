@@ -1,1 +1,21 @@
 
+Api-Watchman is a open-source lightweight terminal based api client
+
+commands
+  set : sets variables { set key value }
+  rm : remove variables { rm key }
+  fetch : fetches url { fetch URL }
+  log : prints variables { log key }
+  clear : clears the console { clear }
+
+enter variables name to fetch them 
+variables are stored in ./config.json
+
+config.json contains
+  def : name of the default url fetched on file change
+  delay : ms to sleep before fetching url
+  type : middle ware to be applied [json,blob,text]
+
+report issues on
+https://github.com/AyushmanTripathy/api-watchman/issues
+
