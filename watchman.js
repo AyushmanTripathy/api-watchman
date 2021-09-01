@@ -86,6 +86,9 @@ function figureCommand(line) {
     case "help":
       help();
       break;
+    case 'exit':
+      process.exit()
+      break;
     default:
       fetchLink(command);
       break;

@@ -1,6 +1,6 @@
 {
   "name": "api-watchman",
-  "version": "1.0.5",
+  "version": "1.2.1",
   "description": "api-watchman is a open-source lightweight terminal based api client",
   "main": "watchman.js",
   "bin": {
