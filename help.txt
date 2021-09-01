@@ -7,9 +7,16 @@ commands
   fetch : fetches url { fetch URL }
   log : prints variables { log key }
   clear : clears the console { clear }
+  opt : change fetch options { obj key value} (NOTE use log obt to see the options)
 
 enter variables name to fetch them 
 variables are stored in ./config.json
+options are stored in ./options.json
+
+CLI options
+  -f fetch url
+  -l print variables
+  -h help
 
 config.json contains
   def : name of the default url fetched on file change

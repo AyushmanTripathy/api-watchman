@@ -1,6 +1,1 @@
-{
-  "type": "json",
-  "delay": "400",
-  "link": "http://localhost:8080/get/YOLO",
-  "def": "link"
-}
+{"type":"json","delay":"1000","link":"http://localhost:8080/get/lol","def":"link"}
