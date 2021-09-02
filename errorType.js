@@ -1,4 +1,4 @@
-module.exports = errorType;
+export default errorType;
 
 function errorType(code) {
   let error = "";

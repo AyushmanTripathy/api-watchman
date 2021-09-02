@@ -1,12 +1,11 @@
-const { red, green, grey, inverse } = require("chalk");
-const fetch = require("node-fetch");
-const { writeFile, readFileSync } = require("fs");
+import chalk from "chalk";
+const { red, green, grey, inverse } = chalk;
+import fetch from "node-fetch";
+import { writeFile, readFileSync } from "fs";
 
-const errorType = require("./errorType.js");
+import errorType from "./errorType.js";
 
-module.exports = { write, loadJson, request };
-
-function write(obj, path) {
+export function write(obj, path) {
   writeFile(path, JSON.stringify(obj), "utf8", (err) => {
     if (err) {
       console.error("couldn't write to config.json");
@@ -15,12 +14,12 @@ function write(obj, path) {
   });
 }
 
-function loadJson(path) {
-  const content = readFileSync(path);
+export function loadJson(path) {
+  const content = readFileSync(new URL(path, import.meta.url));
   return JSON.parse(content);
 }
 
-async function request(link, options, exitAfter) {
+export async function request(link, options, exitAfter) {
   console.log(red(`fetching ${link}`));
 
   const response = await fetch(link, options).catch(console.log);

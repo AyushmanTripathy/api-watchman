@@ -1,10 +1,10 @@
 #! /usr/bin/env node
-const readline = require("readline");
+import { createInterface } from "readline";
 
-const { figureCommand, help, log, watchPath } = require("./commands.js");
-const { request } = require("./util.js");
+import { figureCommand, help, log, watchPath } from "./commands.js";
+import { request } from "./util.js";
 
-const rl = readline.createInterface({
+const rl = createInterface({
   input: process.stdin,
   output: process.stdout,
   terminal: false,

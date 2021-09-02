@@ -1,11 +1,12 @@
-const { readFileSync, watch } = require("fs");
-const { red, green } = require("chalk");
+import { readFileSync, watch } from "fs";
+import pkg from "chalk";
+const { red, green } = pkg;
+import { request, write, loadJson } from "./util.js";
 
-const { request, write, loadJson } = require("./util.js");
 const config = loadJson("./config.json");
 const options = loadJson("./options.json");
 
-module.exports = { figureCommand, log, help, watchPath };
+export { figureCommand, log, help, watchPath };
 
 function figureCommand(line) {
   const input = processLine(line);
@@ -91,7 +92,7 @@ function remove(args) {
 }
 
 function help(exitAfter) {
-  const content = readFileSync(`${__dirname}/help.txt`, "utf8");
+  const content = readFileSync(new URL("help.txt", import.meta.url), "utf8");
   console.log(content);
   if (exitAfter) process.exit();
 }
