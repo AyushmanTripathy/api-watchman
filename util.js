@@ -1,10 +1,10 @@
 const { red, green, grey, inverse } = require("chalk");
 const fetch = require("node-fetch");
-const { writeFile } = require("fs");
+const { writeFile, readFileSync } = require("fs");
 
 const errorType = require("./errorType.js");
 
-module.exports = { write, request };
+module.exports = { write, loadJson, request };
 
 function write(obj, path) {
   writeFile(path, JSON.stringify(obj), "utf8", (err) => {
@@ -13,6 +13,11 @@ function write(obj, path) {
       console.error(err);
     }
   });
+}
+
+function loadJson(path) {
+  const content = readFileSync(path);
+  return JSON.parse(content);
 }
 
 async function request(link, options, exitAfter) {

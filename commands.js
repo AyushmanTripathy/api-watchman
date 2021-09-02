@@ -1,9 +1,9 @@
-const { readFile, watch } = require("fs");
+const { readFileSync, watch } = require("fs");
 const { red, green } = require("chalk");
 
-const { request, write } = require("./util.js");
-const config = require("./config.json");
-const options = require("./options.json");
+const { request, write, loadJson } = require("./util.js");
+const config = loadJson("./config.json");
+const options = loadJson("./options.json");
 
 module.exports = { figureCommand, log, help, watchPath };
 
@@ -64,12 +64,18 @@ function watchPath(path) {
 
     setTimeout(() => {
       running = false;
-      request(config[config.def]);
+      fetchLink("def");
     }, config.delay);
   });
 }
 
 function fetchLink(command) {
+  //special case for def
+  if (command == "def")
+    if (!config[config.def]) return console.log(red(`def is not defined!`));
+    else command = config.def;
+
+  //check if var exits
   if (!config[command] && command)
     return console.log(red(`${command} not defined!`));
   if (command != undefined) request(config[command], options);
@@ -85,11 +91,9 @@ function remove(args) {
 }
 
 function help(exitAfter) {
-  readFile(`${__dirname}/help.txt`, "utf8", function read(err, content) {
-    if (err) console.log(red("could not fetch help.txt"));
-    console.log(content);
-    if (exitAfter) process.exit();
-  });
+  const content = readFileSync(`${__dirname}/help.txt`, "utf8");
+  console.log(content);
+  if (exitAfter) process.exit();
 }
 
 function log(input, exitAfter) {
