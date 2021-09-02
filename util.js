@@ -22,14 +22,14 @@ export function loadJson(path) {
 export async function request(link, options, type, exitAfter) {
   console.log(red(`fetching ${link}`));
 
-  const response = await fetch(link, options).catch(console.log);
+  const response = await fetch(link, options).catch(handleFetchErrors);
 
   if (response)
     if (response.ok) {
       console.log(
         green(`server responded with status ${inverse(response.status)}`)
       );
-      const body = await response[type]().catch(console.log);
+      const body = await response[type]().catch(handleFetchErrors);
       if (body) console.log(body);
     } else {
       console.log(
@@ -37,8 +37,14 @@ export async function request(link, options, type, exitAfter) {
       );
       console.log(options);
       const error = errorType(response.status);
-      console.log(grey(error));
+      console.log(error);
     }
 
   if (exitAfter) return process.exit();
+}
+
+function handleFetchErrors(err) {
+  console.log(red(err.name));
+  console.log(`type : ${err.type}`);
+  console.log(err.message);
 }

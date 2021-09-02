@@ -1,6 +1,6 @@
 import { readFileSync, watch } from "fs";
 import pkg from "chalk";
-const { red, green } = pkg;
+const { red, green, grey } = pkg;
 import { request, write, loadJson } from "./util.js";
 
 const config = loadJson("./config.json");
@@ -54,14 +54,14 @@ function processLine(line) {
 }
 
 function watchPath(path) {
-  console.log(red(`watching ${path}`));
+  console.log(grey(`watching ${path}`));
 
   let running = false;
   watch(path, (eventType, filename) => {
     if (running) return;
 
     running = true;
-    console.log(red(`dectected ${eventType} on ${filename}`));
+    console.log(grey(`dectected ${eventType} on ${filename}`));
 
     setTimeout(() => {
       running = false;
@@ -91,7 +91,7 @@ function remove(input) {
           return console.log(red(`${key} not defined in options`));
         delete options[key];
         write(options, new URL("options.json", import.meta.url));
-        console.log(red(`removed ${key} from options`));
+        console.log(grey(`removed ${key} from options`));
       });
       break;
     case "config":
@@ -100,7 +100,7 @@ function remove(input) {
           return console.log(red(`${key} not defined in config`));
         delete config[key];
         write(config, new URL("config.json", import.meta.url));
-        console.log(red(`removed ${key} from config`));
+        console.log(grey(`removed ${key} from config`));
       });
       break;
     default:

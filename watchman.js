@@ -43,10 +43,11 @@ function checkArgs(wait) {
 }
 
 function init() {
-  console.log("type help to know more");
+  console.log("API-WATCHMAN");
   watchPath(path_to_watch);
 
   fetchLink("def");
+
   readLine();
 }
 
