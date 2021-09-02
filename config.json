@@ -1,1 +1,6 @@
-{"type":"json","delay":"1000","link":"http://localhost:8080/get/lol","def":"link"}
+{
+  "type": "json",
+  "delay": "1000",
+  "link": "https://cli-chat-at.herokuapp.com/",
+  "def": "link"
+}

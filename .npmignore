@@ -1,6 +1,5 @@
 .npmrc
 .gitignore
-node_modules
 example.js
 codegenetator
 package-lock.json
