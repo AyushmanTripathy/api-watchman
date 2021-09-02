@@ -19,7 +19,7 @@ export function loadJson(path) {
   return JSON.parse(content);
 }
 
-export async function request(link, options, exitAfter) {
+export async function request(link, options, type, exitAfter) {
   console.log(red(`fetching ${link}`));
 
   const response = await fetch(link, options).catch(console.log);
@@ -29,7 +29,7 @@ export async function request(link, options, exitAfter) {
       console.log(
         green(`server responded with status ${inverse(response.status)}`)
       );
-      const body = await response[config.type]().catch(console.log);
+      const body = await response[type]().catch(console.log);
       if (body) console.log(body);
     } else {
       console.log(

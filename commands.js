@@ -6,7 +6,7 @@ import { request, write, loadJson } from "./util.js";
 const config = loadJson("./config.json");
 const options = loadJson("./options.json");
 
-export { figureCommand, log, help, watchPath };
+export { figureCommand, fetchLink, log, help, watchPath };
 
 function figureCommand(line) {
   const input = processLine(line);
@@ -73,22 +73,40 @@ function watchPath(path) {
 function fetchLink(command) {
   //special case for def
   if (command == "def")
-    if (!config[config.def]) return console.log(red(`def is not defined!`));
+    if (!config[config.def])
+      return console.log(red(`def ${config.def} is not defined!`));
     else command = config.def;
 
   //check if var exits
   if (!config[command] && command)
     return console.log(red(`${command} not defined!`));
-  if (command != undefined) request(config[command], options);
+  if (command != undefined) request(config[command], options, config.type);
 }
 
-function remove(args) {
-  args.forEach((key) => {
-    if (config[key] == undefined) return console.log(red(`${key} not defined`));
-    delete config[key];
-    write(config, `${__dirname}/config.json`);
-    console.log(red(`removed ${key}`));
-  });
+function remove(input) {
+  switch (input.shift()) {
+    case "opt":
+      input.forEach((key) => {
+        if (options[key] == undefined)
+          return console.log(red(`${key} not defined in options`));
+        delete options[key];
+        write(options, new URL("options.json", import.meta.url));
+        console.log(red(`removed ${key} from options`));
+      });
+      break;
+    case "config":
+      input.forEach((key) => {
+        if (config[key] == undefined)
+          return console.log(red(`${key} not defined in config`));
+        delete config[key];
+        write(config, new URL("config.json", import.meta.url));
+        console.log(red(`removed ${key} from config`));
+      });
+      break;
+    default:
+      console.log(red("no such objects"));
+      break;
+  }
 }
 
 function help(exitAfter) {
@@ -98,7 +116,7 @@ function help(exitAfter) {
 }
 
 function log(input, exitAfter) {
-  // log property if it exits
+  // log property if it exits in config
   // else log the entire obj
   if (input[0] == "opt")
     if (options[input[1]]) console.log(options[input[1]]);
@@ -113,7 +131,7 @@ function changeOptions(args) {
   if (!args.length) return log(["opt"]);
 
   options[args[0]] = args[1];
-  write(options, `${__dirname}/options.json`);
+  write(options, new URL("options.json", import.meta.url));
   console.log(green(`${args[0]} : ${args[1]}`));
 }
 
@@ -121,6 +139,6 @@ function changeConfig(args) {
   if (!args.length) return log([]);
 
   config[args[0]] = args[1];
-  write(config, `${__dirname}/config.json`);
+  write(config, new URL("config.json", import.meta.url));
   console.log(green(`${args[0]} : ${args[1]}`));
 }

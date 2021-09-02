@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 import { createInterface } from "readline";
-
-import { figureCommand, help, log, watchPath } from "./commands.js";
+import { figureCommand, fetchLink, help, log, watchPath } from "./commands.js";
 import { request } from "./util.js";
 
 const rl = createInterface({
@@ -28,7 +27,12 @@ function checkArgs(wait) {
       break;
     case "-f":
       wait = true;
-      request(args.shift(), true);
+      request(args.shift());
+      break;
+    case "-p":
+      path_to_watch = args.shift();
+      wait = true;
+      init();
       break;
     default:
       console.log(`invalid arg ${arg}\nuse -h for help`);
@@ -39,10 +43,10 @@ function checkArgs(wait) {
 }
 
 function init() {
-  //get config
   console.log("type help to know more");
   watchPath(path_to_watch);
 
+  fetchLink("def");
   readLine();
 }
 
