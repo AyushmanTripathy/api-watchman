@@ -1,8 +1,9 @@
 import chalk from "chalk";
 const { red, green, grey, inverse } = chalk;
 import fetch from "node-fetch";
-import { writeFile, readFileSync } from "fs";
+import { writeFile, readFileSync, watch } from "fs";
 
+import { fetchLink } from "./commands.js";
 import errorType from "./errorType.js";
 
 export function write(obj, path) {
@@ -47,4 +48,41 @@ function handleFetchErrors(err) {
   console.log(red(err.name));
   console.log(`type : ${err.type}`);
   console.log(err.message);
+}
+
+export function watchPath(path) {
+  console.log(grey(`watching ${path}`));
+
+  let running = false;
+  watch(path, (eventType, filename) => {
+    if (running) return;
+
+    running = true;
+    console.log(grey(`dectected ${eventType} on ${filename}`));
+
+    setTimeout(() => {
+      running = false;
+      fetchLink("def");
+    }, config.delay);
+  });
+}
+
+export function generateTags() {
+  let arr = [
+    "opt",
+    "header",
+    "load",
+    "set",
+    "fetch",
+    "log",
+    "clear",
+    "rm",
+    "config",
+    "help",
+    "exit",
+  ];
+  arr = arr.concat(Object.keys(config));
+  arr = arr.concat(Object.keys(options));
+  arr = arr.concat(Object.keys(options.headers));
+  return arr;
 }

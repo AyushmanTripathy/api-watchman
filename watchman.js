@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 import { createInterface } from "readline";
-import { figureCommand, fetchLink, help, log, watchPath } from "./commands.js";
-import { request } from "./util.js";
+import { figureCommand, fetchLink, help, log } from "./commands.js";
+import { watchPath, generateTags } from "./util.js";
 
 const rl = createInterface({
   input: process.stdin,
@@ -26,10 +26,6 @@ function checkArgs(wait) {
     case "-l":
       log([args.shift()]);
       break;
-    case "-f":
-      wait = true;
-      request(args.shift());
-      break;
     case "-p":
       path_to_watch = args.shift();
       wait = true;
@@ -46,7 +42,7 @@ function checkArgs(wait) {
 function init() {
   console.log("API-WATCHMAN");
   watchPath(path_to_watch);
-
+  global.completions = generateTags();
   fetchLink("def");
   read();
 }
@@ -59,9 +55,7 @@ function read() {
 
 function completer(line) {
   const word = line.split(" ").pop();
-  const completions =
-    "help exit log rm config set load fetch def opt header clear ".split(" ");
-  const hits = completions.filter((c) => c.startsWith(word));
+  const hits = completions.filter((tag) => tag.startsWith(word));
 
   return [hits.length ? hits : completions, word];
 }

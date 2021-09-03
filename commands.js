@@ -1,14 +1,14 @@
-import { readFileSync, watch } from "fs";
+import { readFileSync } from "fs";
 import pkg from "chalk";
 const { red, green, grey } = pkg;
 import { config as envConfig } from "dotenv";
 
 import { request, write, loadJson } from "./util.js";
 
-const config = loadJson("./config.json");
-const options = loadJson("./options.json");
+global.config = loadJson("./config.json");
+global.options = loadJson("./options.json");
 
-export { figureCommand, fetchLink, log, help, watchPath };
+export { figureCommand, fetchLink, log, help };
 
 function figureCommand(line) {
   const input = processLine(line);
@@ -59,23 +59,6 @@ function processLine(line) {
   });
 
   return arr;
-}
-
-function watchPath(path) {
-  console.log(grey(`watching ${path}`));
-
-  let running = false;
-  watch(path, (eventType, filename) => {
-    if (running) return;
-
-    running = true;
-    console.log(grey(`dectected ${eventType} on ${filename}`));
-
-    setTimeout(() => {
-      running = false;
-      fetchLink("def");
-    }, config.delay);
-  });
 }
 
 function fetchLink(command) {
@@ -182,6 +165,9 @@ function changeOptions(args) {
   options[args[0]] = args[1];
   write(options, new URL("options.json", import.meta.url));
   console.log(green(`${args[0]} : ${args[1]} (option)`));
+
+  //add to completions
+  global.completions.push(args[0]);
 }
 
 function changeConfig(args) {
@@ -190,6 +176,8 @@ function changeConfig(args) {
   config[args[0]] = args[1];
   write(config, new URL("config.json", import.meta.url));
   console.log(green(`${args[0]} : ${args[1]} (config)`));
+
+  global.completions.push(args[0]);
 }
 
 function changeHeader(args) {
@@ -198,4 +186,6 @@ function changeHeader(args) {
   options.headers[args[0]] = args[1];
   write(options, new URL("options.json", import.meta.url));
   console.log(green(`${args[0]} : ${args[1]} (header)`));
+
+  global.completions.push(args[0]);
 }
