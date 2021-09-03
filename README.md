@@ -1,8 +1,7 @@
-# api-watchman
+# Api-Watchman
 
-api-watchman is a open source , lightweight , terminal based api client <br />
+Api-Watchman is a open-source lightweight terminal based api client <br />
 
-### Check it
+### Check it Out
 
 `npm intsall -g watchman-api` <br/>
-run `api-watchman` in the dir to watch <br/>

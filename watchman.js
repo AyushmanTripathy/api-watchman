@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-import { createInterface } from "readline";
+import { createInterface, emitKeypressEvents } from "readline";
 import { figureCommand, fetchLink, help, log, watchPath } from "./commands.js";
 import { request } from "./util.js";
 
@@ -48,6 +48,9 @@ function init() {
 
   fetchLink("def");
 
+  //listner for keypress
+  listen();
+
   readLine();
 }
 
@@ -55,4 +58,30 @@ function readLine() {
   rl.on("line", (line) => {
     figureCommand(line);
   });
+}
+
+function listen() {
+  emitKeypressEvents(process.stdin);
+
+  if (process.stdin.isTTY) {
+    process.stdin.setRawMode(true);
+  }
+  process.stdin.on("keypress", (str, key) => {
+    processKey(key);
+  });
+}
+
+function processKey(key) {
+  switch (key.name) {
+    case "return":
+      console.log("");
+      process.stdout.write("\r");
+      break;
+    case "escape":
+      process.exit();
+      break;
+    default:
+      process.stdout.write(key.sequence);
+      break;
+  }
 }

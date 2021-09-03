@@ -20,7 +20,7 @@ export function loadJson(path) {
 }
 
 export async function request(link, options, type, exitAfter) {
-  console.log(red(`fetching ${link}`));
+  console.log(grey(`fetching ${link}`));
 
   const response = await fetch(link, options).catch(handleFetchErrors);
 

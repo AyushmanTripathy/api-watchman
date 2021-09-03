@@ -16,6 +16,9 @@ function figureCommand(line) {
     case "opt":
       changeOptions(input);
       break;
+    case "header":
+      changeHeader(input);
+      break;
     case "set":
       changeConfig(input);
       break;
@@ -103,6 +106,15 @@ function remove(input) {
         console.log(grey(`removed ${key} from config`));
       });
       break;
+    case "header":
+      input.forEach((key) => {
+        if (options.headers[key] == undefined)
+          return console.log(red(`${key} not defined in header`));
+        delete options.headers[key];
+        write(options, new URL("options.json", import.meta.url));
+        console.log(grey(`removed ${key} from header`));
+      });
+      break;
     default:
       console.log(red("no such objects"));
       break;
@@ -116,13 +128,23 @@ function help(exitAfter) {
 }
 
 function log(input, exitAfter) {
-  // log property if it exits in config
+  // log property if it exits
   // else log the entire obj
-  if (input[0] == "opt")
-    if (options[input[1]]) console.log(options[input[1]]);
-    else console.log(options);
-  else if (!config[input[0]]) console.log(config);
-  else console.log(config[input[0]]);
+
+  switch (input[0]) {
+    case "opt":
+      if (options[input[1]]) console.log(options[input[1]]);
+      else console.log(options);
+      break;
+    case "header":
+      if (options.headers[input[1]]) console.log(options.headers[input[1]]);
+      else console.log(options.headers);
+      break;
+    default:
+      if (!config[input[0]]) console.log(config);
+      else console.log(config[input[0]]);
+      break;
+  }
 
   if (exitAfter) process.exit();
 }
@@ -132,7 +154,7 @@ function changeOptions(args) {
 
   options[args[0]] = args[1];
   write(options, new URL("options.json", import.meta.url));
-  console.log(green(`${args[0]} : ${args[1]}`));
+  console.log(green(`${args[0]} : ${args[1]} (option)`));
 }
 
 function changeConfig(args) {
@@ -140,5 +162,13 @@ function changeConfig(args) {
 
   config[args[0]] = args[1];
   write(config, new URL("config.json", import.meta.url));
-  console.log(green(`${args[0]} : ${args[1]}`));
+  console.log(green(`${args[0]} : ${args[1]} (config)`));
+}
+
+function changeHeader(args) {
+  if (!args.length) return log(["header"]);
+
+  options.headers[args[0]] = args[1];
+  write(options, new URL("options.json", import.meta.url));
+  console.log(green(`${args[0]} : ${args[1]} (header)`));
 }
