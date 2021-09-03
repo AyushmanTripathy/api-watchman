@@ -23,7 +23,7 @@ function figureCommand(line) {
       changeConfig(input);
       break;
     case "fetch":
-      request(input[0], options);
+      request(input[0], options, config.type);
       break;
     case "log":
       log(input);
@@ -77,7 +77,7 @@ function fetchLink(command) {
   //special case for def
   if (command == "def")
     if (!config[config.def])
-      return console.log(red(`def ${config.def} is not defined!`));
+      return console.log(red(`  -  def ${config.def} is not defined!`));
     else command = config.def;
 
   //check if var exits
@@ -94,7 +94,7 @@ function remove(input) {
           return console.log(red(`${key} not defined in options`));
         delete options[key];
         write(options, new URL("options.json", import.meta.url));
-        console.log(grey(`removed ${key} from options`));
+        console.log(grey(` - removed ${key} from options`));
       });
       break;
     case "config":

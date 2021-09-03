@@ -1,12 +1,13 @@
 #! /usr/bin/env node
-import { createInterface, emitKeypressEvents } from "readline";
+import { createInterface } from "readline";
 import { figureCommand, fetchLink, help, log, watchPath } from "./commands.js";
 import { request } from "./util.js";
 
 const rl = createInterface({
   input: process.stdin,
   output: process.stdout,
-  terminal: false,
+  completer: completer,
+  terminal: true,
 });
 
 const args = process.argv.slice(2);
@@ -47,41 +48,20 @@ function init() {
   watchPath(path_to_watch);
 
   fetchLink("def");
-
-  //listner for keypress
-  listen();
-
-  readLine();
+  read();
 }
 
-function readLine() {
+function read() {
   rl.on("line", (line) => {
     figureCommand(line);
   });
 }
 
-function listen() {
-  emitKeypressEvents(process.stdin);
+function completer(line) {
+  const word = line.split(" ").pop();
+  const completions =
+    "help exit log rm config set fetch def opt header clear ".split(" ");
+  const hits = completions.filter((c) => c.startsWith(word));
 
-  if (process.stdin.isTTY) {
-    process.stdin.setRawMode(true);
-  }
-  process.stdin.on("keypress", (str, key) => {
-    processKey(key);
-  });
-}
-
-function processKey(key) {
-  switch (key.name) {
-    case "return":
-      console.log("");
-      process.stdout.write("\r");
-      break;
-    case "escape":
-      process.exit();
-      break;
-    default:
-      process.stdout.write(key.sequence);
-      break;
-  }
+  return [hits.length ? hits : completions, word];
 }
