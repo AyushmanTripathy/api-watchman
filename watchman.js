@@ -60,7 +60,7 @@ function read() {
 function completer(line) {
   const word = line.split(" ").pop();
   const completions =
-    "help exit log rm config set fetch def opt header clear ".split(" ");
+    "help exit log rm config set load fetch def opt header clear ".split(" ");
   const hits = completions.filter((c) => c.startsWith(word));
 
   return [hits.length ? hits : completions, word];

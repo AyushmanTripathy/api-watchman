@@ -1,6 +1,8 @@
 import { readFileSync, watch } from "fs";
 import pkg from "chalk";
 const { red, green, grey } = pkg;
+import { config as envConfig } from "dotenv";
+
 import { request, write, loadJson } from "./util.js";
 
 const config = loadJson("./config.json");
@@ -18,6 +20,9 @@ function figureCommand(line) {
       break;
     case "header":
       changeHeader(input);
+      break;
+    case "load":
+      loadEnv(input[0], input[1], input[2]);
       break;
     case "set":
       changeConfig(input);
@@ -77,7 +82,7 @@ function fetchLink(command) {
   //special case for def
   if (command == "def")
     if (!config[config.def])
-      return console.log(red(`  -  def ${config.def} is not defined!`));
+      return console.log(red(`def ${config.def} is not defined!`));
     else command = config.def;
 
   //check if var exits
@@ -94,7 +99,7 @@ function remove(input) {
           return console.log(red(`${key} not defined in options`));
         delete options[key];
         write(options, new URL("options.json", import.meta.url));
-        console.log(grey(` - removed ${key} from options`));
+        console.log(grey(`removed ${key} from options`));
       });
       break;
     case "config":
@@ -147,6 +152,28 @@ function log(input, exitAfter) {
   }
 
   if (exitAfter) process.exit();
+}
+
+function loadEnv(envKey, saveUnder, saveKey) {
+  envConfig();
+  if (!process.env[envKey])
+    return console.log(red(`key ${envKey} is not defined in .env`));
+
+  console.log(grey(`loaded ${envKey} : ${process.env[envKey]}`));
+  switch (saveUnder) {
+    case "config":
+      changeConfig([saveKey, process.env[envKey]]);
+      break;
+    case "opt":
+      changeOptions([saveKey, process.env[envKey]]);
+      break;
+    case "header":
+      changeHeader([saveKey, process.env[envKey]]);
+      break;
+    default:
+      console.log(red(`${saveUnder} not defined!`));
+      break;
+  }
 }
 
 function changeOptions(args) {
