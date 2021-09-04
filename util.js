@@ -4,7 +4,7 @@ import fetch from "node-fetch";
 import { writeFile, readFileSync, watch } from "fs";
 
 import { fetchLink } from "./commands.js";
-import errorType from "./errorType.js";
+import { explainStatusCode } from "./errorType.js";
 
 export function write(obj, path) {
   writeFile(path, JSON.stringify(obj), "utf8", (err) => {
@@ -23,21 +23,25 @@ export function loadJson(path) {
 export async function request(link, options, type, exitAfter) {
   console.log(grey(`fetching ${link}`));
 
-  const response = await fetch(link, options).catch(handleFetchErrors);
+  const response = await fetch(link, options).catch(
+    handleFetchErrors.bind({ link, exitAfter })
+  );
 
   if (response)
     if (response.ok) {
       console.log(
         green(`server responded with status ${inverse(response.status)}`)
       );
-      const body = await response[type]().catch(handleFetchErrors);
+      const body = await response[type]().catch(
+        handleFetchErrors.bind({ link })
+      );
       if (body) console.log(body);
     } else {
       console.log(
         red(`server responded with status ${inverse(response.status)}`)
       );
       console.log(options);
-      const error = errorType(response.status);
+      const error = explainStatusCode(response.status);
       console.log(error);
     }
 
@@ -48,6 +52,16 @@ function handleFetchErrors(err) {
   console.log(red(err.name));
   console.log(`type : ${err.type}`);
   console.log(err.message);
+
+  if (this.exitAfter) return;
+  switch (err.type) {
+    case "invalid-json":
+      console.log(grey(`fetching as text instead`));
+      request(this.link, options, "text", this.exitAfter);
+      break;
+    case "system":
+      break;
+  }
 }
 
 export function watchPath(path) {
@@ -75,11 +89,13 @@ export function generateTags() {
     "set",
     "fetch",
     "log",
+    "https://",
     "clear",
     "rm",
     "config",
     "help",
     "exit",
+    config[config.def],
   ];
   arr = arr.concat(Object.keys(config));
   arr = arr.concat(Object.keys(options));

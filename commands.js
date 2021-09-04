@@ -3,7 +3,7 @@ import pkg from "chalk";
 const { red, green, grey } = pkg;
 import { config as envConfig } from "dotenv";
 
-import { request, write, loadJson } from "./util.js";
+import { request, write, loadJson, generateTags } from "./util.js";
 
 global.config = loadJson("./config.json");
 global.options = loadJson("./options.json");
@@ -62,6 +62,9 @@ function processLine(line) {
 }
 
 function fetchLink(command) {
+  // fetch if it is a link
+  if (command.startsWith("http")) return request(command, options, config.type);
+
   //special case for def
   if (command == "def")
     if (!config[config.def])
@@ -177,7 +180,9 @@ function changeConfig(args) {
   write(config, new URL("config.json", import.meta.url));
   console.log(green(`${args[0]} : ${args[1]} (config)`));
 
-  global.completions.push(args[0]);
+  // refresh completions to have latest port && def
+  if (args[0] == "def") global.completions = generateTags();
+  else global.completions.push(args[0]);
 }
 
 function changeHeader(args) {
