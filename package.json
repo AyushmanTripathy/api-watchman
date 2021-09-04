@@ -16,7 +16,6 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "dotenv": "^10.0.0",
-    "editor": "^1.0.0",
     "node-fetch": "^2.6.1"
   }
 }

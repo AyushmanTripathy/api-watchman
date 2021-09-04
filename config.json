@@ -1,1 +1,1 @@
-{"type":"json","delay":"1000","link":"http://localhost:8080/post/","def":"err","err":"https://example.com","method":"POST"}
+{"type":"text","delay":"1000","link":"http://localhost:8080/post/","def":"err","err":"https://example.com","method":"POST"}
