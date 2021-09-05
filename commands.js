@@ -3,7 +3,7 @@ import pkg from "chalk";
 const { red, green, grey } = pkg;
 import { config as envConfig } from "dotenv";
 
-import { request, write, loadJson } from "./util.js";
+import { request, write, loadJson, generateTags } from "./util.js";
 
 global.config = loadJson("./config.json");
 global.options = loadJson("./options.json");
@@ -27,9 +27,6 @@ function figureCommand(line) {
     case "set":
       changeConfig(input);
       break;
-    case "fetch":
-      request(input[0], options, config.type);
-      break;
     case "log":
       log(input);
       break;
@@ -43,6 +40,9 @@ function figureCommand(line) {
       help();
       break;
     case "exit":
+      process.exit();
+      break;
+    case "quit":
       process.exit();
       break;
     default:
@@ -62,9 +62,14 @@ function processLine(line) {
 }
 
 function fetchLink(command) {
+  // fetch if it is a link
+  if (command.startsWith("http")) return request(command, options, config.type);
+
   //special case for def
   if (command == "def")
-    if (!config[config.def])
+    if (config.def.startsWith("http"))
+      return request(config.def, options, config.type);
+    else if (!config[config.def])
       return console.log(red(`def ${config.def} is not defined!`));
     else command = config.def;
 
@@ -177,7 +182,9 @@ function changeConfig(args) {
   write(config, new URL("config.json", import.meta.url));
   console.log(green(`${args[0]} : ${args[1]} (config)`));
 
-  global.completions.push(args[0]);
+  // refresh completions to have latest port && def
+  if (args[0] == "def") global.completions = generateTags();
+  else global.completions.push(args[0]);
 }
 
 function changeHeader(args) {

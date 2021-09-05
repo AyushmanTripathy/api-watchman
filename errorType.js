@@ -1,6 +1,4 @@
-export default errorType;
-
-function errorType(code) {
+export default function explainStatusCode(code) {
   let error = "";
   if (code < 200) error += "Informational response\n";
   else if (code < 300) error += "Successful response\n";
