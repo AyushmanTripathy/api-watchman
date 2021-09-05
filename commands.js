@@ -27,9 +27,6 @@ function figureCommand(line) {
     case "set":
       changeConfig(input);
       break;
-    case "fetch":
-      request(input[0], options, config.type);
-      break;
     case "log":
       log(input);
       break;
@@ -43,6 +40,9 @@ function figureCommand(line) {
       help();
       break;
     case "exit":
+      process.exit();
+      break;
+    case "quit":
       process.exit();
       break;
     default:
@@ -67,7 +67,9 @@ function fetchLink(command) {
 
   //special case for def
   if (command == "def")
-    if (!config[config.def])
+    if (config.def.startsWith("http"))
+      return request(config.def, options, config.type);
+    else if (!config[config.def])
       return console.log(red(`def ${config.def} is not defined!`));
     else command = config.def;
 

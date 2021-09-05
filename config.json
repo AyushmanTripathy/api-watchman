@@ -1,1 +1,1 @@
-{"type":"json","delay":"1000","link":"https://example.com","def":"link","err":"https://example.com","method":"POST"}
+{"type":"json","delay":"1000","link":"http://localhost:8080/get/lol","def":"link"}

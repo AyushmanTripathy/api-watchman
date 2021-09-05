@@ -4,7 +4,7 @@ import fetch from "node-fetch";
 import { writeFile, readFileSync, watch } from "fs";
 
 import { fetchLink } from "./commands.js";
-import { explainStatusCode } from "./errorType.js";
+import explainStatusCode from "./errorType.js";
 
 export function write(obj, path) {
   writeFile(path, JSON.stringify(obj), "utf8", (err) => {
@@ -87,14 +87,15 @@ export function generateTags() {
     "header",
     "load",
     "set",
-    "fetch",
     "log",
     "https://",
+    "http://",
     "clear",
     "rm",
     "config",
     "help",
     "exit",
+    "quit",
     config[config.def],
   ];
   arr = arr.concat(Object.keys(config));
