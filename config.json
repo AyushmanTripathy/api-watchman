@@ -1,1 +1,1 @@
-{"type":"text","delay":"1000","link":"https://google.com","def":"link"}
+{"type":"json","delay":"1000","link":"http://localhost:8080/","def":"link"}

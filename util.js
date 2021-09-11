@@ -54,7 +54,7 @@ export async function request(link, options, type, exitAfter) {
     }
 
   const end_time = new Date().getTime();
-  console.log(grey(`fetch ended in ${ end_time - start_time} ms`))
+  console.log(grey(`fetch ended in ${ (end_time - start_time)/1000 }s`))
 
   if (exitAfter) return process.exit();
 }
