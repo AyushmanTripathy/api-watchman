@@ -2,26 +2,28 @@
 Api-Watchman is a open-source lightweight terminal based api client
 
 commands
-  set : sets variables { set key value }
-  rm : remove variables { rm key }
-  log : prints variables { log key }
+  set : sets config variables { set key value }
+  rm : remove keys from objects { rm object key }
+  log : prints variables { log object key }
   clear : clears the console { clear }
+  load : load .env variables { load env_var_name object key }
+  exit || quit : exit Api-watchman
+
   opt : change fetch options { opt key value}
   header : change headers { header key value }
-  load : load .env variable { load var_name object key }
-  exit / quit : exit Api-watchman
+  body : change body { body key value }
 
-enter variable_name or url to fetch
-vaddriables are stored in ./config.json
-fetch options are stored in ./options.json
+enter variable_name or url to fetch them
 
 CLI options
   -p change watch path
-  -l print variables
+  -l use log command
   -h help
 
-config.json contains
-  def : name of the working url (fetched on file change)
+config variables and fetch options are stored as objects
+
+config some variables
+  def : name of the working url or url itself (fetched on file change)
   delay : ms to sleep before fetching url
   type : middle ware to be applied [json,blob,text]
 
