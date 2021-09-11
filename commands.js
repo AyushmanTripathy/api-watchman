@@ -18,6 +18,9 @@ function figureCommand(line) {
     case "opt":
       changeOptions(input);
       break;
+    case "body":
+      changeBody(input);
+      break;
     case "header":
       changeHeader(input);
       break;
@@ -63,7 +66,8 @@ function processLine(line) {
 
 function fetchLink(command) {
   // fetch if it is a link
-  if (command.startsWith("http")) return request(command, options, config.type);
+  if (command.startsWith("http"))
+    return request(command, options, config.type);
 
   //special case for def
   if (command == "def")
@@ -108,6 +112,15 @@ function remove(input) {
         console.log(grey(`removed ${key} from header`));
       });
       break;
+    case "body":
+      input.forEach((key) => {
+        if (options.body[key] == undefined)
+          return console.log(red(`${key} not defined in body`));
+        delete options.body[key];
+        write(options, new URL("options.json", import.meta.url));
+        console.log(grey(`removed ${key} from body`));
+      });
+      break;
     default:
       console.log(red("no such objects"));
       break;
@@ -132,6 +145,10 @@ function log(input, exitAfter) {
     case "header":
       if (options.headers[input[1]]) console.log(options.headers[input[1]]);
       else console.log(options.headers);
+      break;
+    case "body":
+      if (options.body[input[1]]) console.log(options.body[input[1]]);
+      else console.log(options.body);
       break;
     default:
       if (!config[input[0]]) console.log(config);
@@ -158,6 +175,9 @@ function loadEnv(envKey, saveUnder, saveKey) {
     case "header":
       changeHeader([saveKey, process.env[envKey]]);
       break;
+    case "body":
+      changeBody([saveKey, process.env[envKey]]);
+      break;
     default:
       console.log(red(`${saveUnder} not defined!`));
       break;
@@ -167,32 +187,68 @@ function loadEnv(envKey, saveUnder, saveKey) {
 function changeOptions(args) {
   if (!args.length) return log(["opt"]);
 
-  options[args[0]] = args[1];
+  const key = args.shift();
+  // if there are no more args
+  if (!args.length) return console.log(options[key]);
+
+  const value = args.join(" ");
+
+  options[key] = value;
   write(options, new URL("options.json", import.meta.url));
-  console.log(green(`${args[0]} : ${args[1]} (option)`));
+  console.log(green(`${key} : ${value} (option)`));
 
   //add to completions
-  global.completions.push(args[0]);
+  global.completions.push(key);
 }
 
 function changeConfig(args) {
   if (!args.length) return log([]);
 
-  config[args[0]] = args[1];
-  write(config, new URL("config.json", import.meta.url));
-  console.log(green(`${args[0]} : ${args[1]} (config)`));
+  const key = args.shift();
 
-  // refresh completions to have latest port && def
-  if (args[0] == "def") global.completions = generateTags();
-  else global.completions.push(args[0]);
+  // if there are no more args
+  if (!args.length) return console.log(config[key]);
+
+  const value = args.join(" ");
+
+  config[key] = value;
+  write(config, new URL("config.json", import.meta.url));
+  console.log(green(`${key} : ${value} (config)`));
+
+  // refresh completions to have latest def
+  if (key == "def") global.completions = generateTags();
+  else global.completions.push(key);
 }
 
 function changeHeader(args) {
   if (!args.length) return log(["header"]);
 
-  options.headers[args[0]] = args[1];
-  write(options, new URL("options.json", import.meta.url));
-  console.log(green(`${args[0]} : ${args[1]} (header)`));
+  const key = args.shift();
 
-  global.completions.push(args[0]);
+  // if there are no more args
+  if (!args.length) return console.log(options.headers[key]);
+
+  const value = args.join(" ");
+
+  options.headers[key] = value;
+  write(options, new URL("options.json", import.meta.url));
+  console.log(green(`${key} : ${value} (header)`));
+
+  global.completions.push(key);
+}
+
+function changeBody(args) {
+  if (!args.length) return log(["body"]);
+
+  const key = args.shift();
+  // if there are no more args
+  if (!args.length) return console.log(options.body[key]);
+
+  const value = args.join(" ");
+
+  options.body[key] = value;
+  write(options, new URL("options.json", import.meta.url));
+  console.log(green(`${key} : ${value} (body)`));
+
+  global.completions.push(key);
 }
