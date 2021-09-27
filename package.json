@@ -6,6 +6,9 @@
   "bin": {
     "api-watchman": "watchman.js"
   },
+  "scripts": {
+    "build": "rollup --config rollup.config.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/AyushmanTripathy/watchman-api.git"
@@ -17,5 +20,8 @@
     "chalk": "^4.1.2",
     "dotenv": "^10.0.0",
     "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "rollup-plugin-uglify": "^6.0.4"
   }
 }

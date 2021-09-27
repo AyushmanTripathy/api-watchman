@@ -44,10 +44,8 @@ function figureCommand(line) {
       break;
     case "exit":
       process.exit();
-      break;
     case "quit":
       process.exit();
-      break;
     default:
       fetchLink(command);
       break;
@@ -56,6 +54,7 @@ function figureCommand(line) {
 
 function processLine(line) {
   let arr = [];
+
   line = line.trim().split(" ");
   line.forEach((word) => {
     if (word != "") arr.push(word);
