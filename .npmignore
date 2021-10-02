@@ -1,5 +1,9 @@
-.npmrc
-.gitignore
-example.js
-codegenetator
-package-lock.json
+*
+
+!config.json
+!build
+!options.json
+!LICENSE
+!help.txt
+!package.json
+!README.md

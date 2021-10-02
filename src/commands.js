@@ -5,8 +5,8 @@ import { config as envConfig } from "dotenv";
 
 import { request, write, loadJson, generateTags } from "./util.js";
 
-global.config = loadJson("./config.json");
-global.options = loadJson("./options.json");
+global.config = loadJson("../config.json");
+global.options = loadJson("../options.json");
 
 export { figureCommand, fetchLink, log, help };
 
@@ -127,7 +127,7 @@ function remove(input) {
 }
 
 function help(exitAfter) {
-  const content = readFileSync(new URL("help.txt", import.meta.url), "utf8");
+  const content = readFileSync(new URL("../help.txt", import.meta.url), "utf8");
   console.log(content);
   if (exitAfter) process.exit();
 }
