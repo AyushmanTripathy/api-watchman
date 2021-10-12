@@ -21,7 +21,7 @@ export function loadJson(path) {
 }
 
 export async function request(link, options, type, exitAfter) {
-  console.log(grey(`fetching ${link}`));
+  log(grey(`fetching ${link}`));
 
   const start_time = new Date().getTime()
 
@@ -37,37 +37,37 @@ export async function request(link, options, type, exitAfter) {
 
   if (response)
     if (response.ok) {
-      console.log(
+      log(
         green(`server responded with status ${inverse(response.status)}`)
       );
       const body = await response[type]().catch(
         handleFetchErrors.bind({ link })
       );
-      if (body) console.log(body);
+      if (body) log(body);
     } else {
-      console.log(
+      log(
         red(`server responded with status ${inverse(response.status)}`)
       );
-      console.log(options);
+      log(options);
       const error = explainStatusCode(response.status);
-      console.log(error);
+      log(error);
     }
 
   const end_time = new Date().getTime();
-  console.log(grey(`fetch ended in ${ (end_time - start_time)/1000 }s`))
+  log(grey(`fetch ended in ${ (end_time - start_time)/1000 }s`))
 
   if (exitAfter) return process.exit();
 }
 
 function handleFetchErrors(err) {
-  console.log(red(err.name));
-  console.log(`type : ${err.type}`);
-  console.log(err.message);
+  log(red(err.name));
+  log(`type : ${err.type}`);
+  log(err.message);
 
   if (this.exitAfter) return;
   switch (err.type) {
     case "invalid-json":
-      console.log(grey(`fetching as text instead`));
+      log(grey(`fetching as text instead`));
       request(this.link, options, "text", this.exitAfter);
       break;
     case "system":
@@ -76,14 +76,14 @@ function handleFetchErrors(err) {
 }
 
 export function watchPath(path) {
-  console.log(grey(`watching ${path}`));
+  log(grey(`watching ${path}`));
 
   let running = false;
   watch(path, (eventType, filename) => {
     if (running) return;
 
     running = true;
-    console.log(grey(`dectected ${eventType} on ${filename}`));
+    log(grey(`dectected ${eventType} on ${filename}`));
 
     setTimeout(() => {
 
