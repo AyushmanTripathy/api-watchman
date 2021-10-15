@@ -1,10 +1,14 @@
 {
   "name": "api-watchman",
-  "version": "1.2.5",
+  "version": "1.7.0",
   "description": "api-watchman is a open-source lightweight terminal based api client",
-  "main": "watchman.js",
+  "main": "build/watchman.js",
   "bin": {
-    "api-watchman": "watchman.js"
+    "api-watchman": "build/watchman.js"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -17,5 +21,8 @@
     "chalk": "^4.1.2",
     "dotenv": "^10.0.0",
     "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "rollup-plugin-uglify": "^6.0.4"
   }
 }

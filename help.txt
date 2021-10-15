@@ -1,5 +1,5 @@
 
-Api-Watchman is a open-source lightweight terminal based api client
+Api-Watchman is a open source lightweight terminal based api client
 
 commands
   set : sets config variables { set key value }

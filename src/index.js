@@ -1,4 +1,3 @@
-#! /usr/bin/env node
 import { createInterface } from "readline";
 import { figureCommand, fetchLink, help, log } from "./commands.js";
 import { watchPath, generateTags } from "./util.js";
@@ -10,11 +9,14 @@ const rl = createInterface({
   terminal: true,
 });
 
+globalThis.log = (string) => console.log(string);
+
 const args = process.argv.slice(2);
 let path_to_watch = process.cwd();
 
 if (args.length) checkArgs(false);
 else init();
+
 
 function checkArgs(wait) {
   const arg = args.shift();
@@ -49,6 +51,7 @@ function init() {
 
 function read() {
   rl.on("line", (line) => {
+    if (!line) return;
     figureCommand(line);
   });
 }

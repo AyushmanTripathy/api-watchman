@@ -5,8 +5,8 @@ import { config as envConfig } from "dotenv";
 
 import { request, write, loadJson, generateTags } from "./util.js";
 
-global.config = loadJson("./config.json");
-global.options = loadJson("./options.json");
+global.config = loadJson("../config.json");
+global.options = loadJson("../options.json");
 
 export { figureCommand, fetchLink, log, help };
 
@@ -44,10 +44,8 @@ function figureCommand(line) {
       break;
     case "exit":
       process.exit();
-      break;
     case "quit":
       process.exit();
-      break;
     default:
       fetchLink(command);
       break;
@@ -56,6 +54,7 @@ function figureCommand(line) {
 
 function processLine(line) {
   let arr = [];
+
   line = line.trim().split(" ");
   line.forEach((word) => {
     if (word != "") arr.push(word);
@@ -128,7 +127,7 @@ function remove(input) {
 }
 
 function help(exitAfter) {
-  const content = readFileSync(new URL("help.txt", import.meta.url), "utf8");
+  const content = readFileSync(new URL("../help.txt", import.meta.url), "utf8");
   console.log(content);
   if (exitAfter) process.exit();
 }
