@@ -12,9 +12,6 @@ npm publish
 git add .
 git commit -m "published $(npm view psre version)"
 git push origin master
-echo 'successfully published'
-
-git push origin master
 
 # merging release branch
 echo "merging master --> release"
@@ -26,5 +23,4 @@ curl \
   -d '{"base":"release","head":"master"}'
 echo "merge complete"
 
-git commit -am "published $(npm view psre version)"
 echo 'successfully published'
