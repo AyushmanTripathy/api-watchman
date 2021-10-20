@@ -16,3 +16,28 @@ __check it out__  `npm install -g api-watchman`
 - Automatically Fetching when file changes are detected.
 - Load .env variables
 ---
+
+<details>
+<summary>File Structure</summary>
+<br>
+
+├── build\
+│   └── watchman.js\
+├── config.json\
+├── help.txt\
+├── LICENSE\
+├── nodemon.json\
+├── options.json\
+├── package.json\
+├── package-lock.json\
+├── publish.sh\
+├── README.md\
+├── rollup.config.js\
+├── src\
+│   ├── commands.js\
+│   ├── errorType.js\
+│   ├── example.js\
+│   ├── index.js\
+│   └── util.js
+2 directories, 16 files
+</details>
