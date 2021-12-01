@@ -4,7 +4,7 @@ echo "building"
 npm run build
 
 git commit -am 'publishing'
-npm version minor
+#npm version minor
 
 echo "publishing"
 npm publish

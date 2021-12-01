@@ -1,6 +1,5 @@
 import { readFileSync } from "fs";
-import pkg from "chalk";
-const { red, green, grey } = pkg;
+import { red, green, dim } from "btss"
 import { config as envConfig } from "dotenv";
 
 import { request, write, loadJson, generateTags } from "./util.js";
@@ -90,7 +89,7 @@ function remove(input) {
           return console.log(red(`${key} not defined in options`));
         delete options[key];
         write(options, new URL("options.json", import.meta.url));
-        console.log(grey(`removed ${key} from options`));
+        console.log(dim(`removed ${key} from options`));
       });
       break;
     case "config":
@@ -99,7 +98,7 @@ function remove(input) {
           return console.log(red(`${key} not defined in config`));
         delete config[key];
         write(config, new URL("config.json", import.meta.url));
-        console.log(grey(`removed ${key} from config`));
+        console.log(dim(`removed ${key} from config`));
       });
       break;
     case "header":
@@ -108,7 +107,7 @@ function remove(input) {
           return console.log(red(`${key} not defined in header`));
         delete options.headers[key];
         write(options, new URL("options.json", import.meta.url));
-        console.log(grey(`removed ${key} from header`));
+        console.log(dim(`removed ${key} from header`));
       });
       break;
     case "body":
@@ -117,7 +116,7 @@ function remove(input) {
           return console.log(red(`${key} not defined in body`));
         delete options.body[key];
         write(options, new URL("options.json", import.meta.url));
-        console.log(grey(`removed ${key} from body`));
+        console.log(dim(`removed ${key} from body`));
       });
       break;
     default:
@@ -163,7 +162,7 @@ function loadEnv(envKey, saveUnder, saveKey) {
   if (!process.env[envKey])
     return console.log(red(`key ${envKey} is not defined in .env`));
 
-  console.log(grey(`loaded ${envKey} : ${process.env[envKey]}`));
+  console.log(dim(`loaded ${envKey} : ${process.env[envKey]}`));
   switch (saveUnder) {
     case "config":
       changeConfig([saveKey, process.env[envKey]]);
